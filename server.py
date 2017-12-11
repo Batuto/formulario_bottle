@@ -26,7 +26,8 @@ def new():
         #CONNECT DATABASE
         con = sqlite3.connect("./data/pipl.db")
         cur = con.cursor()
-        cur.execute("INSERT INTO people VALUES (null,?,?,?,?,?)", (name, last_name, bio, age, regdatetime))
+        cur.execute("INSERT INTO people VALUES (null,?,?,?,?,?)",
+                    (name, last_name, bio, age, regdatetime))
         rows = cur.execute("SELECT * FROM people ORDER by datetime ASC")
         con.commit()
         return template("./views/newperson.tpl", rows=rows)
@@ -35,7 +36,9 @@ def new():
 
 @route('/about')
 def about():
-    return template("views/base.tpl",base="<h3>About</h3><br/><button onClick=window.history.back()>Return</button>",
+    return template("views/base.tpl",
+                    base="<h3>About</h3><br/><button onClick="
+                    "window.history.back()>Return</button>",
                     page_title='About')
 
 @route("/edit<no:int>", method=["GET","POST"])
@@ -50,7 +53,8 @@ def edit_person(no):
         #CONNECT DATABASE
         con = sqlite3.connect("data/pipl.db")
         cur = con.cursor()
-        cur.execute("UPDATE people SET name=?, last_name=?, bio=?, age=?, datetime=? WHERE id=?",
+        cur.execute("UPDATE people SET name=?, last_name=?, bio=?, age=?,"
+                    " datetime=? WHERE id=?",
                     (name, last_name, bio, age, regdatetime, pid))
         con.commit()
         rows = cur.execute("SELECT * FROM people ORDER BY datetime ASC")
@@ -96,6 +100,8 @@ def person_display(item):
 
 @error(404)
 def error404(error):
-    return template("views/base.tpl", base="<p class='error'>404</p><br><br><p class='marked'>Not Found!</p><br><p class='naur_title'><i>Naur!</i></p><br><button onClick=window.history.back()>Return</button>")
+    return template("views/base.tpl",
+                    page_title='Not Found',
+                    base="<p class='error'>404</p><br><br><p class='marked'>Not Found!</p><br><p class='naur_title'><i>Naur!</i></p><br><button onClick=window.history.back()>Return</button>")
 
 run(host="0.0.0.0", port=8080, debug=True, reloader=True)
